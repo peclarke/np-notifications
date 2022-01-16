@@ -4,7 +4,7 @@ import os
 from data.Fleet import Fleet
 from flask import Flask, render_template
 import __init__
-from check import begin_check, debug
+from check import begin_check, debug, get_all_enemy_fleets
 
 USER_ID = 5 # this is my player ID
 ROOT = "https://np.ironhelmet.com/api"
@@ -78,6 +78,12 @@ def check():
     begin_check(np)
     return '200 OK'
 
+@app.route('/daily-overview')
+def daily():
+    np = make_request()
+    get_all_enemy_fleets(np)
+    return '200 OK'
+
 @app.route('/debug')
 def debug_me():
     debug()
@@ -88,5 +94,3 @@ def debug_me():
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
 '''
-#print('asd')
-#print([str(k) for k in neptunes_pride.get_moving_enemies()])
