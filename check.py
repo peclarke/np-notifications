@@ -43,6 +43,11 @@ def reset_fleet_database():
             info = f.to_dict()
             remove_fleet_uid(int(info['uid']))
 
+def get_all_enemy_fleets(np):
+    enemies: List[Fleet] = np.get_enemy_fleets()
+    moving: List[Fleet] = np.get_moving_enemies()
+    format_message(StatusCode.DAILY, [enemies, moving])
+
 '''
 LOOK INTO THIS AT ANOTHER POINT...
 A missing ship is one that's in the database but not on the radar.

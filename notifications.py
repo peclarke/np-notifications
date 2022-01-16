@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 from twilio.rest import Client
 import __init__
 from data.Fleet import Fleet
@@ -26,7 +26,7 @@ def send_message(text):
 Takes any data given to it and formats it into the proper message
 to send via text.
 '''
-def format_message(status_code, data: List[Fleet]):
+def format_message(status_code: StatusCode, data: Any):
     if status_code == StatusCode.ENEMY:
         # Edge case where you are truly fucked and receiving pincer attacks
         if len(data) == 1:
@@ -43,5 +43,11 @@ def format_message(status_code, data: List[Fleet]):
         pass
     elif status_code == StatusCode.FLEET_WATCH:
         pass
+    elif status_code == StatusCode.DAILY:
+        initial: str = "(NP) DAILY: Here's your daily Neptune's digest:\n"
+        initial += f"Enemy Fleets: {len(data[0])}"
+        initial += f"Moving Fleets (Inclusive): {len(data[1])}"
+        send_message(initial)
+
     else:
         raise Exception(f'Unknown status code: {status_code}')
