@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Neptune's Pride Notifier</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            margin: 0px;
+        }
+
+        .mod {
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mod-2 {
+            width: 20%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .content {
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h3>Neptune's Pride Notification System</h1>
+        <p class="lead">by Paul!</p>
+    </div>
+    <div class="text-center content">
+        <p>You're only seeing the front-end side of a rather extensive back-end system. At the moment, we have nothing here.</p>
+        <p>These are some of the technologies being used at the moment to get this off the ground:</p>
+        <ul class="list-group mod">
+            <li class="list-group-item"><strong>Firebase/Firestore</strong> (Database for storing fleet information / message notifications etc.)</li>
+            <li class="list-group-item"><strong>Twilio API</strong> (Sending texts to your phones)</li>
+            <li class="list-group-item"><strong>The Neptune's Pride API</strong> (Making requests to the game and getting relevant information)</li>
+            <li class="list-group-item"><strong>Google Cloud App Engine</strong> (Hosting this app)</li>
+            <li class="list-group-item"><strong>Google Cloud Scheduler</strong> (Constantly makes requests to the back-end to check for updates)</li>
+        </ul>
+        <br>
+        <p>The back-end here is built in Python, which parses the game data, interacts with the database, and makes third party calls to APIs.</p>
+        <h3>Statistics</h3>
+        <ul class="list-group mod-2">
+            <li class="list-group-item"><strong>Alliance Members: </strong>0</li>
+            <li class="list-group-item"><strong>Enemy Fleets Seen: </strong>{{ enemyfleets }}</li>
+            <li class="list-group-item"><strong>Moving Enemy Fleets: </strong>{{ movingfleets }}</li>
+        </ul>
+    </div>      
+
+    <!--<div class="container">
+        <div class="row">
+            <div class="col">
+                Alliance Members: 0
+            </div>
+            <div class="col">
+                Enemy Fleets Seen: {{ enemyfleets }}
+            </div>
+            <div class="col">
+                Moving Enemy Fleets: {{ movingfleets }}
+            </div>
+        </div>
+    </div>-->
+</body>
+</html>
