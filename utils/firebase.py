@@ -41,10 +41,6 @@ def remove_fleet_uid(uid: int):
     except Exception as e:
         print(f'An exception occured: {e}')
 
-# follower functions down the line
-
-# maybe store notifications as well?
-
 # store alliance user data as well...
 def get_all_alliances():
     docs = db.collection('alliances').stream()
@@ -53,7 +49,7 @@ def get_all_alliances():
     for a in docs:
         if len(a.id) < 15:
             info = a.to_dict()
-            alliances.append(a)
+            alliances.append(a.to_dict())
     return alliances
 
 def is_alliance(uid: int): # checks if user is allied with you
@@ -75,3 +71,7 @@ def get_ally_info(uid: int):
     fleet_ref = db.collection('is_alliance').document(str(uid))
     doc = fleet_ref.get()
     return doc.to_dict()
+
+# follower functions down the line
+
+# maybe store notifications as well?

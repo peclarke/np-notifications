@@ -11,26 +11,21 @@ from __init__ import db
 from data.Fleet import Fleet
 from utils.firebase import find_fleet, set_fleet, get_all_fleets, remove_fleet_uid
 from consts import StatusCode
-#from main import make_request, NeptunesPrideStatus
 from notifications import format_message, send_message
 
-def begin_check(np_status):
-    scan_for_ships(np_status)
-    #scan_for_missing_ships(np_status)
-    #scan_for_threshold(np_status)
+def begin_check(np):
+    scan_for_ships(np)
 
 def scan_for_ships(np):
-    #moving_enemies = np_status.get_moving_enemies() ===== USE IN PRODUCTION
     enemies: List[Fleet] = np.get_moving_enemies()
 
     # remove any existing fleets (that we notified about already)
-    for e in enemies: #MOVING_ENEMIES LATER
+    for e in enemies:
         if find_fleet(e):
-            enemies.remove(e) #MOVING_ENEMIES LATER
+            enemies.remove(e)
         
-    # (we'll also need something here to handle followrs in the future)
-    if len(enemies) > 0: #MOVING_ENEMIES LATER
-        format_message(StatusCode.ENEMY, enemies)
+    if len(enemies) > 0:
+        format_message(StatusCode.ENEMY, enemies, np)
         # add each new fleet into the database
         for e in enemies:
             set_fleet(e)
@@ -43,10 +38,10 @@ def reset_fleet_database():
             info = f.to_dict()
             remove_fleet_uid(int(info['uid']))
 
-def get_all_enemy_fleets(np):
+def setup_daily_digest(np):
     enemies: List[Fleet] = np.get_enemy_fleets()
     moving: List[Fleet] = np.get_moving_enemies()
-    format_message(StatusCode.DAILY, [enemies, moving])
+    format_message(StatusCode.DAILY, [enemies, moving], np)
 
 '''
 LOOK INTO THIS AT ANOTHER POINT...
@@ -69,5 +64,5 @@ I'm almost tempted to make a new table to put the date of when the ship went mis
 def scan_for_threshold(np):
     pass
 
-def debug():
-    send_message("Debug baby!")
+def debug(np):
+    send_message("Debug baby!", np)
