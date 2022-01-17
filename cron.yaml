@@ -1,7 +1,7 @@
 cron:
+- description: "Daily digest of all ships in scanning range"
+  url: /daily-overview
+  schedule: every day 09:00
 #- description: "Scan for ships around in range"
 #  url: /check
 #  schedule: every 5 mins
-#- description: "Daily digest of all ships in scanning range"
-#  url: /daily-overview
-#  schedule: every 24 hours

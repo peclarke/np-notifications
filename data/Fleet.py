@@ -52,7 +52,7 @@ class Fleet():
         return True
 
     def is_moving(self):
-        return self.ouid == False
+        return not self.ouid
 
     def __str__(self):
         if self.is_moving():

@@ -2,17 +2,26 @@ import __init__
 from __init__ import db
 from data.Fleet import Fleet
 from datetime import datetime
+from google.cloud import firestore
 
-def find_fleet(fleet: Fleet):
+def does_fleet_exist(fleet: Fleet):
     fleet_ref = db.collection('fleets').document(str(fleet.uid))
     doc = fleet_ref.get()
     return doc.exists
 
-def set_fleet(fleet: Fleet):
+def get_fleet(fleet: Fleet):
+    fleet_ref = db.collection('fleets').document(str(fleet.uid))
+    return fleet_ref.get().to_dict()
+
+def set_fleet(fleet: Fleet, seen_by: int):
     data = {
         "uid": fleet.uid,
         "seen": True, # if the player has seen this yet (AT THE MOMENT YES. LATER, ADD RESPONSE)
-        "notified": datetime.now() # this doesn't matter too much.
+        "notified": firestore.SERVER_TIMESTAMP,
+        "owner": fleet.puid,
+        "seen_by": seen_by,
+        "strength": fleet.strength,
+        "name": fleet.name
     }
     fleet_ref = db.collection('fleets')
     fleet_ref.document(str(fleet.uid)).set(data)

@@ -97,7 +97,6 @@ def check():
 
 @app.route('/daily-overview')
 def daily():
-    reset_fleet_database()
     np: List[NeptunesPrideStatus] = make_request()
     for req in np:
         setup_daily_digest(req)
@@ -107,7 +106,8 @@ def daily():
 def debug_me():
     #np = make_super_owner_request()
     nps = make_request()
-    asd = nps[0].get_moving_enemies()
+    #asd = nps[0].get_moving_enemies()
+    begin_check(nps[0])
     #debug(np)
     return '200 OK'
 
