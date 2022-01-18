@@ -7,7 +7,7 @@ import json
 from utils.filter_utils import filter_moving_fleets
 from utils.firebase import get_all_alliances
 import __init__
-from check import begin_check, setup_daily_digest
+from check import begin_check, setup_daily_digest, update_missing_fleets, update_old_fleet_status
 
 ROOT = "https://np.ironhelmet.com/api"
 PARAMS = {
@@ -117,6 +117,13 @@ def check():
         begin_check(req)
     return '200 OK'
 
+@app.route('/ship-analytics')
+def shipanal():
+    all_enem: List[Fleet] = get_alliance_enemies()
+    update_missing_fleets(all_enem)
+    update_old_fleet_status(all_enem)
+    return '200 OK'
+
 @app.route('/daily-overview')
 def daily():
     np: List[NeptunesPrideStatus] = make_request()
@@ -130,13 +137,13 @@ def network():
     np: List[NeptunesPrideStatus] = make_request()
     all_fleets: List[Fleet] = []
     for req in np:
-        my_fleets: List[Fleet] = req.get_my_fleets() # broken
+        my_fleets: List[Fleet] = req.get_my_fleets()
         for f in my_fleets:
             all_fleets.append(f.to_dict())
 
     # get all enemy info
     enemies_json: List = []
-    for e in get_alliance_enemies(): # also broken
+    for e in get_alliance_enemies():
         enemies_json.append(e.to_dict())
 
     return render_template('network.html', ally_fleets=all_fleets, enemies=enemies_json, debug="debugtimebbaby")

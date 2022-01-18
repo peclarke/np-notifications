@@ -39,7 +39,11 @@ def set_fleet(fleet: Fleet, seen_by: int):
 
 def set_old_fleet(uid: int, data: Any):
     missing_ref = db.collection('old_fleets')
-    missing_ref.document(str(uid)).set(data)
+    missing_ref.add(data)
+
+def get_all_old_fleets():
+    oldies = db.collection('old_fleets').stream()
+    return oldies
 
 def reset_fleets(fleet: Fleet):
     try:
@@ -60,6 +64,12 @@ def remove_fleet_uid(uid: int):
         return removing
     except Exception as e:
         print(f'An exception occured: {e}')
+
+def get_aggregate_fleet_info(uid: int):
+    # get all documents of the fleet uid from fleets and old_fleets
+
+    # order in ascending order
+    pass
 
 # store alliance user data as well...
 def get_all_alliances():
