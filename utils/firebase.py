@@ -77,21 +77,27 @@ def is_alliance(uid: int): # checks if user is allied with you
     doc = fleet_ref.get()
     return doc.exists
 
-def remove_alliance(uid: int):
+def remove_ally(uid: int):
     try:
         db.collection('alliances').document(str(uid)).delete()
     except Exception as e:
         print(f'An exception occured: {e}')
 
 '''
-Gets the ally's information from the database. Will return their uid
-and their api_key to be used in any calculations. 
+Gets the ally's information from the database. 
+Will return their uid, api_key, phone, name.
 '''
 def get_ally_info(uid: int):
-    fleet_ref = db.collection('is_alliance').document(str(uid))
-    doc = fleet_ref.get()
+    alliance_ref = db.collection('alliances').document(str(uid))
+    doc = alliance_ref.get()
     return doc.to_dict()
 
-# follower functions down the line
-
-# maybe store notifications as well?
+def add_ally(uid: int, api_key: str, phone: str, name: str):
+    alliance_ref = db.collection('alliances').document(str(uid))
+    data = {
+        "uid": uid,
+        "api_key": api_key,
+        "phone": phone,
+        "name": name
+    }
+    alliance_ref.document(str(uid)).set(data)
