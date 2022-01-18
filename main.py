@@ -4,6 +4,7 @@ import os
 from data.Fleet import Fleet
 from flask import Flask, render_template
 import json
+from utils.filter_utils import filter_moving_fleets
 from utils.firebase import get_all_alliances
 import __init__
 from check import begin_check, setup_daily_digest
@@ -105,7 +106,9 @@ app = Flask(__name__)
 @app.route('/')
 def root():
     np: NeptunesPrideStatus = make_super_owner_request()
-    return render_template('index.html', allies=len(get_all_alliances()), enemyfleets=len(np.get_enemy_fleets()), movingfleets=len(np.get_moving_enemies()))
+    enemies: List[Fleet] = get_alliance_enemies()
+    moving: List[Fleet] = filter_moving_fleets(enemies)
+    return render_template('index.html', allies=len(get_all_alliances()) + 1, enemyfleets=len(enemies), movingfleets=len(moving))
 
 @app.route('/check')
 def check():

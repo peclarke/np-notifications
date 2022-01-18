@@ -42,6 +42,7 @@
         <p>These are some of the technologies being used at the moment to get this off the ground:</p>
         <ul class="list-group mod">
             <li class="list-group-item"><strong>Firebase/Firestore</strong> (Database for storing fleet information / message notifications etc.)</li>
+            <li class="list-group-item"><strong>Plotly</strong> (For creating graphs from Neptune's API data)</li>
             <li class="list-group-item"><strong>Twilio API</strong> (Sending texts to your phones)</li>
             <li class="list-group-item"><strong>The Neptune's Pride API</strong> (Making requests to the game and getting relevant information)</li>
             <li class="list-group-item"><strong>Google Cloud App Engine</strong> (Hosting this app)</li>
@@ -49,7 +50,7 @@
         </ul>
         <br>
         <p>The back-end here is built in Python, which parses the game data, interacts with the database, and makes third party calls to APIs.</p>
-        <h3>Statistics</h3>
+        <h3>Alliance Statistics</h3>
         <ul class="list-group mod-2">
             <li class="list-group-item"><strong>Alliance Members: </strong>{{ allies }}</li>
             <li class="list-group-item"><strong>Enemy Fleets Seen: </strong>{{ enemyfleets }}</li>
