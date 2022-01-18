@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src='https://cdn.plot.ly/plotly-2.8.3.min.js'></script>
+    <title>NPN: Alliance Network</title>
+    <style>
+        #myDiv {
+            height: 120vh;
+            margin-top: -10vh;
+        }
+
+        canvas {
+            background-color : black;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        body {
+            min-height: 150vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h3>The Alliance Network</h1>
+        <p class="lead">A collation of our collective information</p>
+    </div>
+    <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+    
+
+    <script type="text/javascript">
+
+        PIDS = {
+            0: "Yang",
+            1: "Connor",
+            2: "Gareth",
+            3: "Paul",
+            4: "Sam",
+            5: "Blake",
+            6: "Katya"
+        }
+
+        const fleets = {{ enemies | tojson }};
+        const allies = {{ ally_fleets | tojson }}
+        const debug = '{{ debug }}'
+
+        var all_x_ally_coords = [];
+        var all_y_ally_coords = [];
+        var all_ally_text = [];
+
+        // Sort out the details
+        for (var f in allies) {
+            all_x_ally_coords.push(allies[f]['x'])
+            all_y_ally_coords.push(allies[f]['y'])
+
+            var p_name = PIDS[allies[f]['puid']]
+            var str = allies[f]['strength']
+            all_ally_text.push(p_name + ": " + str + " ships")
+        }
+
+        var all_x_enemy_coords = [];
+        var all_y_enemy_coords = [];
+        var all_enemy_text = [];
+
+        for (var f in fleets) {
+            all_x_enemy_coords.push(fleets[f]['x'])
+            all_y_enemy_coords.push(fleets[f]['y'])
+
+            var p_name = PIDS[fleets[f]['puid']]
+            var str = fleets[f]['strength']
+            all_enemy_text.push(p_name + ": " + str + " ships")
+        }
+
+        var trace1 = {
+            x: all_x_ally_coords,
+            y: all_y_ally_coords,
+            mode: 'markers+text',
+            type: 'scatter',
+            name: 'The Alliance',
+            text: all_ally_text,
+            textposition: 'top center',
+            textfont: {
+                family:  'Raleway, sans-serif',
+                color: 'white'
+            },
+            marker: { size: 12 }
+            };
+
+        var trace2 = {
+            x: all_x_enemy_coords,
+            y: all_y_enemy_coords,
+            mode: 'markers+text',
+            type: 'scatter',
+            name: 'Enemy Fleet',
+            hovertemplate: '<b>Name:</b> %{fleets}' +
+                           '<br><i>Cock</i></br>' +
+                           'Torture',
+            text: all_enemy_text,
+            textfont : {
+                family:'Helvetica',
+                color: 'white'
+            },
+            textposition: 'bottom center',
+            marker: { size: 12 }
+        };
+
+        var data = [ trace1, trace2 ];
+
+        var layout = {
+        xaxis: {
+            autorange: true
+        },
+        yaxis: {
+            autorange: "reversed"
+        },
+        plot_bgcolor: "#100029",
+        legend: {
+            y: 0.5,
+            yref: 'paper',
+            font: {
+            family: 'Arial, sans-serif',
+            size: 20,
+            color: 'white',
+            }
+        },
+        };
+
+        Plotly.newPlot('myDiv', data, layout);
+        Plotly.relayout('myDiv', {'xaxis.visible': false,
+                                    'yaxis.visible': false})
+    </script>
+</body>
+</html>

@@ -12,3 +12,8 @@ def test_all_enemies(status: NeptunesPrideStatus):
 
 def test_num_fleets(status: NeptunesPrideStatus):
     assert len(status.fleets) == 3
+
+def test_get_my_fleets(status: NeptunesPrideStatus):
+    res = status.get_my_fleets()
+    assert len(res) == 1
+    assert res[0].uid == 10
