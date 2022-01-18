@@ -5,7 +5,7 @@ from data.Fleet import Fleet
 from flask import Flask, render_template
 from utils.firebase import get_all_alliances
 import __init__
-from check import begin_check, debug, reset_fleet_database, setup_daily_digest
+from check import begin_check, setup_daily_digest
 
 ROOT = "https://np.ironhelmet.com/api"
 PARAMS = {
@@ -104,10 +104,10 @@ def daily():
 
 @app.route('/debug')
 def debug_me():
-    #np = make_super_owner_request()
-    nps = make_request()
+    np = make_super_owner_request()
+    #nps = make_request()
     #asd = nps[0].get_moving_enemies()
-    begin_check(nps[0])
+    #begin_check(nps[0])
     #debug(np)
     return '200 OK'
 

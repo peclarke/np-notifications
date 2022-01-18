@@ -31,13 +31,19 @@ def format_message(status_code: StatusCode, data: Any, np):
         # Edge case where you are truly fucked and receiving pincer attacks
         if len(data) == 1:
             single_enemy: Fleet = data[0]
-            send_message(f"(NP) ALERT: {single_enemy.strength} ships have entered scanning range from {single_enemy.get_owner_name()}", np)
+            if send_message(f"(NP) ALERT: {single_enemy.strength} ships have entered scanning range from {single_enemy.get_owner_name()}", np):
+                return (200, "Message sent!")
+            else:
+                return (400, "Error")
         elif len(data) > 1:
             initial: str = "(NP) ALERT: Multiple fleets have entered scanning range. Details are as follows\n"
             for e in data:
                 initial += f"{e.strength} ships - {e.get_owner_name()}\n"
             initial += "Good luck out there. I'll be surprised if anyone ever gets this text. Let me know."
-            send_message(initial, np)
+            if send_message(initial, np):
+                return (200, "Message sent!")
+            else:
+                return (400, "Error")
 
     elif status_code == StatusCode.FLEET_SHIPS:
         pass
@@ -47,7 +53,11 @@ def format_message(status_code: StatusCode, data: Any, np):
         initial: str = "(NP) DAILY: Here's your daily Neptune's digest:\n"
         initial += f"Enemy Fleets: {len(data[0])}\n"
         initial += f"Moving Fleets (Inclusive): {len(data[1])}"
-        send_message(initial, np)
+        if send_message(initial, np):
+            return (200, "Message sent!")
+        else:
+            return (400, "Error")
+
 
     else:
         raise Exception(f'Unknown status code: {status_code}')

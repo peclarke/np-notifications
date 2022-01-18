@@ -7,9 +7,9 @@ Steps:
 '''
 
 from typing import List
-from __init__ import db
 from data.Fleet import Fleet
-from utils.firebase import does_fleet_exist, set_fleet, get_all_fleets, remove_fleet_uid
+from utils.filter_utils import filter_not_moving_fleets, filter_unnotified_fleets
+from utils.firebase import does_fleet_exist, set_fleet, get_all_fleets, remove_fleet_uid, set_old_fleet
 from consts import StatusCode
 from notifications import format_message, send_message
 
@@ -19,8 +19,8 @@ def begin_check(np):
 
 def scan_for_ships(np):
     enemies: List[Fleet] = np.get_moving_enemies()
-    unnotified = list(filter(lambda x: not does_fleet_exist(x), enemies))
-    
+    unnotified = filter_unnotified_fleets(enemies)
+
     # format msg, and add fleets to db
     if len(unnotified) > 0:
         format_message(StatusCode.ENEMY, unnotified, np)
@@ -35,12 +35,13 @@ def scan_for_ships(np):
 '''
 def set_notify_fleet_at_star(np):
     enemies: List[Fleet] = np.get_enemy_fleets()
-    # isolate those which are NOT moving
-    not_moving = list(filter(lambda x: not x.is_moving(), enemies))
-    # check if any of these have been notified
+    not_moving = filter_not_moving_fleets(enemies)
+
+    # remove the already notified ones
     for f in not_moving:
         if does_fleet_exist(f):
-            remove_fleet_uid(int(f.uid)) # THIS REMOVES IT. LATER ON, IT'S BETTER TO MOVE IT INTO A DIFFERENT TABLE.
+            removed: Fleet = remove_fleet_uid(int(f.uid))
+            set_old_fleet(int(f.uid), removed)
 
 # do this every 24 hrs
 def reset_fleet_database():
@@ -55,24 +56,6 @@ def setup_daily_digest(np):
     moving: List[Fleet] = np.get_moving_enemies()
     format_message(StatusCode.DAILY, [enemies, moving], np)
 
-'''
-LOOK INTO THIS AT ANOTHER POINT...
-A missing ship is one that's in the database but not on the radar.
-I'm almost tempted to make a new table to put the date of when the ship went missing
-'''
-'''def scan_for_missing_ships(np: NeptunesPrideStatus):
-    enemies: List[Fleet] = np.get_enemy_fleets()
-    fleets = get_all_fleets()
-    for f in fleets:
-        info = f.to_dict()
-        for e in enemies:
-            # if a match is made, remove it. 
-            if f['uid'] == e.uid:
-                enemies.remove(e)
-    # delete the remaining enemies
-    for e in enemies:
-        remove_fleet_uid(e.uid)
-'''
 def scan_for_threshold(np):
     pass
 
