@@ -17,9 +17,6 @@ pip3 install -r requirements.txt
 
 Create a .env file with the following fields:
 ```bash
-USERNAME=np_username
-PASSWORD=np_password
-
 CURRENT_GAME_ID=game_id
 API_VERSION=0.1
 API_KEY=api_key
