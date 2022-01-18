@@ -13,7 +13,7 @@
 '''
 import __init__
 from consts import PIDS
-from utils.utils import pid_to_name
+from utils.general_utils import pid_to_name
 
 class Fleet():
     def __init__(self, json):
@@ -46,13 +46,11 @@ class Fleet():
         return pid_to_name(self.puid)
 
     # need some tests...
-    def is_id_owner_of(self, id: int):
-        if id == self.puid:
-            return False
-        return True
+    def is_id_owner_of(self, uid: int):
+        return uid == self.puid
 
     def is_moving(self):
-        return self.ouid == False
+        return not self.ouid
 
     def __str__(self):
         if self.is_moving():
