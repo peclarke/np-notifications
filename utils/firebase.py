@@ -5,6 +5,8 @@ import firebase_admin
 from firebase_admin import credentials
 #from google.cloud import firestore
 from firebase_admin import firestore
+
+from data.Star import Star
 #from google.cloud import firestore
 
 cred = credentials.Certificate('FirebaseAdmin.json')
@@ -111,3 +113,23 @@ def add_ally(uid: int, api_key: str, phone: str, name: str):
         "name": name
     }
     alliance_ref.document(str(uid)).set(data)
+
+def add_star(star: Star):
+    if star.is_visible():
+        data = {
+            "uid": star.uid,
+            "owner": star.owner,
+            "ships": star.get_num_ships(),
+            "name": star.name,
+            "points": star.get_points(),
+            "net_resources": star.net_resources,
+            "x": star.x,
+            "y": star.y,
+            "time_recorded": firestore.SERVER_TIMESTAMP,
+        }
+        fleet_ref = db.collection('stars')
+        fleet_ref.add(data)
+
+def get_all_stars():
+    stars_ref = db.collection('stars').stream()
+    return [doc.to_dict() for doc in stars_ref]

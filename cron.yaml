@@ -5,3 +5,6 @@ cron:
 - description: "Scan for ships around in range"
   url: /check
   schedule: every 5 mins
+- description: "Update fleets table with new fleets and get rid of old ones"
+  url: /ship-analytics
+  schedule: every 1 hours

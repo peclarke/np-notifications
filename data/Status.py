@@ -2,6 +2,7 @@ from typing import List
 import requests
 
 from data.Fleet import Fleet
+from data.Star import Star
 
 class NeptunesPrideStatus():
     def __init__(self, root, params, user_id, phone):
@@ -17,7 +18,8 @@ class NeptunesPrideStatus():
         # create player obj
 
         self.stars = []
-        # create stars obj
+        for star in self.res['stars'].values():
+            self.stars.append(Star(star))
 
     def get_my_fleets(self):
         return list(filter(lambda x: x.is_id_owner_of(self.owner), self.fleets))
@@ -48,7 +50,7 @@ class NeptunesPrideStatus():
         return self.phone
 
     def get_stars(self):
-        pass
+        return self.stars
 
     def get_players(self):
         pass

@@ -13,7 +13,7 @@
     <style>
         #myDiv {
             height: 120vh;
-            margin-top: -10vh;
+            margin-top: -3vh;
         }
 
         canvas {
@@ -53,46 +53,43 @@
         const ally_data = {{ ally_data | tojson }}
         const allies = {{ ally_fleets | tojson }}
 
-        var all_x_ally_coords = [];
-        var all_y_ally_coords = [];
+        const stars = {{ stars | tojson }}
+        const star_names = {{ star_names | tojson }}
+        const star_xs = {{ star_xs | tojson }}
+        const star_ys = {{ star_ys | tojson }}
+
+        const enemy_xs = {{ enemy_xs | tojson }}
+        const enemy_ys = {{ enemy_ys | tojson }}
+
+        const ally_xs = {{ ally_xs | tojson }}
+        const ally_ys = {{ ally_ys | tojson }}
         var all_ally_text = [];
 
         // Sort out the details
         for (var f in allies) {
-            all_x_ally_coords.push(allies[f]['x'])
-            all_y_ally_coords.push(allies[f]['y'])
-
             var p_name = PIDS[allies[f]['puid']]
             var str = allies[f]['strength']
             all_ally_text.push(p_name + ": " + str + " ships")
         }
 
-        var all_x_enemy_coords = [];
-        var all_y_enemy_coords = [];
         var all_enemy_text = [];
 
         for (var f in fleets) {
-            all_x_enemy_coords.push(fleets[f]['x'])
-            all_y_enemy_coords.push(fleets[f]['y'])
-
             var p_name = PIDS[fleets[f]['puid']]
             var str = fleets[f]['strength']
             all_enemy_text.push(p_name + ": " + str + " ships")
         }
-
-        // later on, move the above to back end in python.
-
+        
         var trace1 = {
-            x: all_x_ally_coords,
-            y: all_y_ally_coords,
+            x: ally_xs,
+            y: ally_ys,
             mode: 'markers+text',
             type: 'scatter',
             name: 'The Alliance',
             customdata: ally_data,
             text: all_ally_text,
-            hovertemplate: '<b>Name:</b> %{customdata[0]}' +
-                           '<br><b>Moving:</b> %{customdata[1]}</br>' +
-                           '<i>%{text}</i>',
+            hovertemplate: '<b>Name:</b> %{customdata}' +
+                           '<br><i>%{text}</i></br>',
             textposition: 'top center',
             textfont: {
                 family:  'Raleway, sans-serif',
@@ -102,8 +99,8 @@
             };
 
         var trace2 = {
-            x: all_x_enemy_coords,
-            y: all_y_enemy_coords,
+            x: enemy_xs,
+            y: enemy_ys,
             mode: 'markers+text',
             type: 'scatter',
             name: 'Enemy Fleet',
@@ -120,7 +117,24 @@
             marker: { size: 12 }
         };
 
-        var data = [ trace1, trace2 ];
+        var trace3 = {
+            x: star_xs,
+            y: star_ys,
+            mode: 'markers+text',
+            type: 'scatter',
+            name: 'Stars',
+            opacity: 0.5,
+            text: star_names,
+            textposition: 'top center',
+            textfont: {
+                family:  'Raleway, sans-serif',
+                color: 'white',
+                size: 8,
+            },
+            marker: { size: 6, color: 'white' }
+        };
+
+        var data = [ trace1, trace2, trace3 ];
 
         var layout = {
         xaxis: {
