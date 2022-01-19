@@ -49,8 +49,9 @@
         }
 
         const fleets = {{ enemies | tojson }};
+        const en_names = {{ enemy_names | tojson }}
+        const ally_data = {{ ally_data | tojson }}
         const allies = {{ ally_fleets | tojson }}
-        const debug = '{{ debug }}'
 
         var all_x_ally_coords = [];
         var all_y_ally_coords = [];
@@ -79,13 +80,19 @@
             all_enemy_text.push(p_name + ": " + str + " ships")
         }
 
+        // later on, move the above to back end in python.
+
         var trace1 = {
             x: all_x_ally_coords,
             y: all_y_ally_coords,
             mode: 'markers+text',
             type: 'scatter',
             name: 'The Alliance',
+            customdata: ally_data,
             text: all_ally_text,
+            hovertemplate: '<b>Name:</b> %{customdata[0]}' +
+                           '<br><b>Moving:</b> %{customdata[1]}</br>' +
+                           '<i>%{text}</i>',
             textposition: 'top center',
             textfont: {
                 family:  'Raleway, sans-serif',
@@ -100,10 +107,11 @@
             mode: 'markers+text',
             type: 'scatter',
             name: 'Enemy Fleet',
-            hovertemplate: '<b>Name:</b> %{fleets}' +
-                           '<br><i>Cock</i></br>' +
-                           'Torture',
+            customdata: en_names,
             text: all_enemy_text,
+            hovertemplate: '<b>Name:</b> %{customdata[0]}' +
+                           '<br><b>Moving:</b> %{customdata[1]}</br>' +
+                           '<i>%{text}</i>',
             textfont : {
                 family:'Helvetica',
                 color: 'white'
