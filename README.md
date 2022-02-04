@@ -38,7 +38,8 @@ Make sure that the Google Cloud Scheduling system is enabled for this to constan
 
 ## Screenshots
 ![Website Homepage](homepage.png)
-![Example Texts](IMG_0264.PNG | width=100)
+<img src="https://user-images.githubusercontent.com/30831649/152510652-ed16c5c8-9352-4303-a55c-037428f5e86c.PNG" width="100" height="100">
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
