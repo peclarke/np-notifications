@@ -38,7 +38,7 @@ Make sure that the Google Cloud Scheduling system is enabled for this to constan
 
 ## Screenshots
 ![Website Homepage](homepage.png)
-![Example Texts](IMG_0264.PNG)
+![Example Texts](IMG_0264.PNG | width=100)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
