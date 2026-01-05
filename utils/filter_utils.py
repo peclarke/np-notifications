@@ -7,3 +7,6 @@ def filter_unnotified_fleets(enemies: List[Fleet]):
 
 def filter_not_moving_fleets(enemies: List[Fleet]):
     return list(filter(lambda x: not x.is_moving(), enemies))
+
+def filter_moving_fleets(enemies: List[Fleet]):
+    return list(filter(lambda x: x.is_moving(), enemies))

@@ -9,7 +9,7 @@ Steps:
 from typing import List
 from data.Fleet import Fleet
 from utils.filter_utils import filter_not_moving_fleets, filter_unnotified_fleets
-from utils.firebase import does_fleet_exist, set_fleet, get_all_fleets, remove_fleet_uid, set_old_fleet
+from utils.firebase import does_fleet_exist, get_all_old_fleets, set_fleet, get_all_fleets, remove_fleet_uid, set_old_fleet
 from consts import StatusCode
 from notifications import format_message, send_message
 
@@ -26,6 +26,37 @@ def scan_for_ships(np):
         format_message(StatusCode.ENEMY, unnotified, np)
         for e in enemies:
             set_fleet(e, int(np.owner))
+
+'''
+1) If a fleet exists in the database (fleets table, that is) AND
+2) Does not exist in our scanning range, THEN
+- Move it to the old fleets table
+'''
+def update_missing_fleets(alliance_enemies: List[Fleet]):
+    # get all fleets from the database and all enemies in scanning range
+    all_fleets = get_all_fleets()
+    enemies: List[int] = [k.uid for k in alliance_enemies]
+    # check if the fleet exists in scanning range, if not boot it
+    for f in all_fleets:
+        g = f.to_dict()
+        if g['uid'] not in enemies:
+            fleet_info = remove_fleet_uid(g['uid'])
+            set_old_fleet(g['uid'], fleet_info)
+
+'''
+1) If a fleet has been recorded at one point (i.e. in the old_fleets table) AND
+2) It is NOT moving at a star (i.e. within scanning range not moving) THEN
+- On occasion, re-add it to the old-fleets database to update it's status
+=== We'll use this data later on when we create time-series analytics of the ships
+'''
+def update_old_fleet_status(alliance_enemies: List[Fleet]):
+    oldies = get_all_old_fleets()
+    not_moving: List[Fleet] = [k.uid for k in filter_not_moving_fleets(alliance_enemies)]
+
+    for f in oldies:
+        g = f.to_dict()
+        if g['uid'] in not_moving:
+            set_old_fleet(g['uid'], g)
 
 '''
 1) If a fleet has been notified about already AND

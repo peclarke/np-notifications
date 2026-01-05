@@ -47,10 +47,21 @@ class Fleet():
 
     # need some tests...
     def is_id_owner_of(self, uid: int):
-        return uid == self.puid
+        return int(uid) == self.puid
 
     def is_moving(self):
         return not self.ouid
+
+    def to_dict(self):
+        return {
+            'uid': self.uid,
+            'puid': self.puid,
+            'x': self.x,
+            'y': self.y,
+            'strength': self.strength,
+            'name': self.name,
+            'ouid': self.ouid
+        }
 
     def __str__(self):
         if self.is_moving():
